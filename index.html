@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kana Recall</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Japanese kana trainer</p>
+          <h1>Kana Recall</h1>
+        </div>
+        <div class="header-actions">
+          <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true" aria-controls="sidebar">
+            Menu
+          </button>
+          <div class="score-strip" aria-label="Player progress">
+            <span><strong id="xpValue">0</strong> XP</span>
+            <span>Level <strong id="levelValue">1</strong></span>
+            <span><strong id="streakValue">0</strong> streak</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+          <nav class="mode-tabs" aria-label="Modes">
+            <div class="nav-group">
+              <p class="nav-label">Train</p>
+              <button class="tab is-active" data-mode="learn" type="button">Learn</button>
+              <button class="tab" data-mode="practice" type="button">Practice</button>
+              <button class="tab" data-mode="memory" type="button">Full memory</button>
+            </div>
+            <div class="nav-group">
+              <p class="nav-label">Reference</p>
+              <button class="tab" data-mode="map" type="button">Master map</button>
+              <button class="tab" data-mode="stats" type="button">Stats</button>
+            </div>
+          </nav>
+
+          <section class="control-panel" aria-label="Practice controls">
+            <div class="field-group">
+              <label for="difficultySelect">Difficulty</label>
+              <select id="difficultySelect">
+                <option value="basic">Main kana</option>
+                <option value="yoon">Main + yoon</option>
+                <option value="voiced">Main + dakuten</option>
+                <option value="complete">Main + dakuten + yoon</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="scriptSelect">Script</label>
+              <select id="scriptSelect">
+                <option value="both">Hiragana + katakana</option>
+                <option value="hiragana">Hiragana</option>
+                <option value="katakana">Katakana</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="directionSelect">Direction</label>
+              <select id="directionSelect">
+                <option value="kanaToRomaji">Kana to romaji</option>
+                <option value="romajiToKana">Romaji to kana</option>
+              </select>
+            </div>
+          </section>
+        </aside>
+
+        <section class="workspace">
+        <section class="mode-pane is-active" id="learnPane">
+          <article class="prompt-card learn-card" aria-live="polite">
+            <p class="card-label" id="learnScriptLabel">Hiragana</p>
+            <div class="big-kana" id="learnKana">あ</div>
+            <button class="answer-reveal" id="learnRevealBtn" type="button">
+              <span class="answer-text" id="learnRomaji">Tap to reveal</span>
+            </button>
+            <p class="hint-text" id="learnHint">Study the shape, sound, and row. Mark it when it sticks.</p>
+            <div class="action-row">
+              <button class="secondary" id="learnAgainBtn" type="button">Again</button>
+              <button class="primary" id="learnKnowBtn" type="button">I know it</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="mode-pane" id="mapPane">
+          <div class="map-panel global-map-panel">
+            <div class="section-heading">
+              <div>
+                <h2>Global master map</h2>
+                <p class="hint-text">All kana are shown here, independent of the practice filters.</p>
+              </div>
+              <span id="mapCount">0 items</span>
+            </div>
+            <div class="kana-map" id="kanaMap" aria-label="Global kana master map"></div>
+          </div>
+        </section>
+
+        <section class="mode-pane" id="practicePane">
+          <article class="prompt-card choice-card practice-setup" id="practiceSetup">
+            <p class="card-label">Practice setup</p>
+            <h2>Choose your session</h2>
+            <div class="session-grid">
+              <div class="field-group">
+                <label for="practiceModeSelect">Mode</label>
+                <select id="practiceModeSelect">
+                  <option value="choice">Multiple choice</option>
+                  <option value="gap">Gap filling</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="questionCountSelect">Questions</label>
+                <select id="questionCountSelect">
+                  <option value="10">Level 1: 10 questions</option>
+                  <option value="15">Level 2: 15 questions</option>
+                  <option value="20">Level 3: 20 questions</option>
+                </select>
+              </div>
+            </div>
+            <p class="hint-text" id="practiceSetupSummary">A short round will be built from your current sidebar settings.</p>
+            <button class="primary" id="startPracticeBtn" type="button">Start session</button>
+          </article>
+
+          <article class="prompt-card choice-card practice-run" id="practiceRun" aria-live="polite">
+            <div class="practice-status">
+              <span id="practiceProgress">Question 1/10</span>
+              <span id="practiceScore">0 correct</span>
+            </div>
+            <p class="card-label" id="practiceScriptLabel">Recall</p>
+            <div class="big-kana" id="practicePrompt">あ</div>
+            <div class="choice-grid" id="practiceChoiceGrid"></div>
+            <form class="gap-form" id="gapForm">
+              <input id="gapAnswerInput" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Practice answer" />
+              <button class="primary" type="submit">Submit</button>
+            </form>
+            <p class="feedback" id="practiceFeedback">Answer the prompt.</p>
+            <div class="action-row">
+              <button class="secondary" id="zenPracticeBtn" type="button">Zen mode</button>
+              <button class="secondary" id="endPracticeBtn" type="button">End session</button>
+            </div>
+          </article>
+
+          <article class="prompt-card choice-card practice-result" id="practiceResult">
+            <p class="card-label">Session complete</p>
+            <div class="answer-text" id="practiceResultScore">0/10</div>
+            <p class="hint-text" id="practiceResultSummary">Review your focus queue and start another round.</p>
+            <div class="action-row">
+              <button class="secondary" id="exitZenResultBtn" type="button">Exit zen</button>
+              <button class="secondary" id="practiceAgainBtn" type="button">New setup</button>
+              <button class="primary" id="practiceRepeatBtn" type="button">Repeat settings</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="mode-pane" id="memoryPane">
+          <div class="section-heading memory-heading">
+            <div>
+              <h2>Write from memory</h2>
+              <p id="memoryPrompt">Fill the kana in order from romaji prompts.</p>
+            </div>
+            <div class="action-row compact">
+              <button class="secondary" id="toggleOrderBtn" type="button">Random order</button>
+              <button class="primary" id="checkMemoryBtn" type="button">Check</button>
+            </div>
+          </div>
+          <div class="memory-grid" id="memoryGrid"></div>
+          <div class="memory-summary" id="memorySummary" aria-live="polite"></div>
+        </section>
+
+        <section class="mode-pane" id="statsPane">
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span>Confidence</span>
+              <strong id="confidenceValue">0%</strong>
+              <div class="meter"><span id="confidenceMeter"></span></div>
+            </article>
+            <article class="stat-card">
+              <span>Practiced</span>
+              <strong id="practicedValue">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>Accuracy</span>
+              <strong id="accuracyValue">0%</strong>
+            </article>
+            <article class="stat-card">
+              <span>Badges</span>
+              <strong id="badgeValue">0</strong>
+            </article>
+          </div>
+          <div class="stats-panel">
+            <div class="section-heading">
+              <h2>Focus queue</h2>
+              <button class="danger" id="resetProgressBtn" type="button">Clear local progress</button>
+            </div>
+            <div id="focusList" class="focus-list"></div>
+            <p class="storage-note">
+              Progress is stored only in this browser under the key <code>kana-recall-progress-v1</code>.
+            </p>
+          </div>
+        </section>
+        </section>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
