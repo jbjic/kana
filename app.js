@@ -511,9 +511,18 @@ function renderPracticeMistakes(session) {
           .map(
             (mistake) => `
               <div class="mistake-item">
-                <span><strong>${mistake.prompt}</strong> ${labelFor(mistake.script)}</span>
-                <span>Your answer: ${mistake.userAnswer}</span>
-                <span>Correct: ${mistake.correctAnswer}</span>
+                <div class="mistake-head">
+                  <strong>${mistake.prompt}</strong>
+                  <span class="mistake-script">${labelFor(mistake.script)}</span>
+                </div>
+                <div class="mistake-row">
+                  <span class="mistake-label">Your answer</span>
+                  <span class="mistake-value">${mistake.userAnswer}</span>
+                </div>
+                <div class="mistake-row">
+                  <span class="mistake-label">Correct</span>
+                  <span class="mistake-value">${mistake.correctAnswer}</span>
+                </div>
               </div>
             `
           )

@@ -544,7 +544,7 @@ input:hover {
 }
 
 .practice-mistakes {
-  width: min(100%, 640px);
+  width: min(100%, 760px);
 }
 
 .mistake-panel {
@@ -566,17 +566,30 @@ input:hover {
 
 .mistake-list {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
 }
 
 .mistake-item,
 .mistake-empty {
   display: grid;
-  gap: 4px;
+  gap: 8px;
   border: 1px solid rgba(219, 228, 221, 0.92);
   border-radius: 8px;
   background: rgba(247, 244, 236, 0.55);
   padding: 12px;
+}
+
+.mistake-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mistake-row {
+  display: grid;
+  gap: 2px;
 }
 
 .mistake-item span,
@@ -586,7 +599,20 @@ input:hover {
 
 .mistake-item strong {
   color: var(--ink);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+}
+
+.mistake-script,
+.mistake-label {
+  color: var(--blue);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mistake-value {
+  color: var(--ink);
+  font-weight: 700;
 }
 
 .session-grid {
