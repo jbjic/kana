@@ -183,6 +183,7 @@ const els = {
   practiceFeedback: document.querySelector("#practiceFeedback"),
   practiceResultScore: document.querySelector("#practiceResultScore"),
   practiceResultSummary: document.querySelector("#practiceResultSummary"),
+  practiceMistakes: document.querySelector("#practiceMistakes"),
   toggleOrder: document.querySelector("#toggleOrderBtn"),
   checkMemory: document.querySelector("#checkMemoryBtn"),
   memoryGrid: document.querySelector("#memoryGrid"),
@@ -374,6 +375,7 @@ function startPractice() {
     queue,
     index: 0,
     correct: 0,
+    mistakes: [],
     answered: false,
     direction: els.direction.value,
   };
@@ -449,6 +451,14 @@ function answerPractice(value) {
   const isCorrect = normalize(value) === normalize(correctAnswer);
   session.answered = true;
   if (isCorrect) session.correct += 1;
+  if (!isCorrect) {
+    session.mistakes.push({
+      prompt: session.direction === "kanaToRomaji" ? item.kana : item.romaji,
+      script: item.script,
+      userAnswer: value || "(blank)",
+      correctAnswer,
+    });
+  }
 
   els.practiceChoiceGrid.querySelectorAll("button").forEach((option) => {
     option.disabled = true;
@@ -483,7 +493,34 @@ function renderPracticeResult() {
   els.practiceResultScore.textContent = `${session.correct}/${session.count}`;
   els.practiceResultSummary.textContent = `${level} complete with ${percent}% accuracy. ${rewardLine(percent)}`;
   els.exitZenResult.style.display = state.zenMode ? "" : "none";
+  renderPracticeMistakes(session);
   renderStats();
+}
+
+function renderPracticeMistakes(session) {
+  if (!session.mistakes.length) {
+    els.practiceMistakes.innerHTML = '<div class="mistake-empty">No mistakes this round.</div>';
+    return;
+  }
+
+  els.practiceMistakes.innerHTML = `
+    <div class="mistake-panel">
+      <div class="mistake-title">Review mistakes</div>
+      <div class="mistake-list">
+        ${session.mistakes
+          .map(
+            (mistake) => `
+              <div class="mistake-item">
+                <span><strong>${mistake.prompt}</strong> ${labelFor(mistake.script)}</span>
+                <span>Your answer: ${mistake.userAnswer}</span>
+                <span>Correct: ${mistake.correctAnswer}</span>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
 }
 
 function renderMemory() {

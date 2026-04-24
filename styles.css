@@ -543,6 +543,52 @@ input:hover {
   display: none;
 }
 
+.practice-mistakes {
+  width: min(100%, 640px);
+}
+
+.mistake-panel {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  padding: 16px;
+}
+
+.mistake-title {
+  color: var(--blue);
+  font-size: 0.86rem;
+  font-weight: 850;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.mistake-list {
+  display: grid;
+  gap: 10px;
+}
+
+.mistake-item,
+.mistake-empty {
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(219, 228, 221, 0.92);
+  border-radius: 8px;
+  background: rgba(247, 244, 236, 0.55);
+  padding: 12px;
+}
+
+.mistake-item span,
+.mistake-empty {
+  color: var(--muted);
+}
+
+.mistake-item strong {
+  color: var(--ink);
+  font-size: 1.1rem;
+}
+
 .session-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
